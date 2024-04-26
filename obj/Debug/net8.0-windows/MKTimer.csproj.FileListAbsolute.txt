@@ -1,0 +1,17 @@
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\MKTimer.exe
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\MKTimer.deps.json
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\MKTimer.runtimeconfig.json
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\MKTimer.dll
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\MKTimer.pdb
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.AssemblyInfoInputs.cache
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.AssemblyInfo.cs
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.csproj.CoreCompileInputs.cache
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.dll
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\refint\MKTimer.dll
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.pdb
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.genruntimeconfig.cache
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\ref\MKTimer.dll
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.csproj.AssemblyReference.cache
+C:\Users\schma\Documents\RandomCoding\MKTimer\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
+C:\Users\schma\Documents\RandomCoding\MKTimer\obj\Debug\net8.0-windows\MKTimer.csproj.Up2Date
