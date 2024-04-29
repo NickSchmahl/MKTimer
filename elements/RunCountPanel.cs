@@ -44,7 +44,7 @@ namespace MKTimer {
         private string TimerString()
         {
             int hours = secondsCounter / 3660;
-            int minutes = secondsCounter/ 60;
+            int minutes = secondsCounter/ 60 % 60;
             int seconds = secondsCounter % 60;
 
             string result = "";
