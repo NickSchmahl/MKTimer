@@ -3,6 +3,7 @@ using System.Drawing;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
+using System.Linq;
 
 namespace MKTimer
 {
@@ -106,7 +107,7 @@ namespace MKTimer
             double sum = 0;
             double?[] lapTimes = new double?[3];
             bool allFilled = true;
-            Run sob = timerGridView.sob;
+            Run sob = trackInfo.sob?.Copy();
 
             // Calculate the sum of the first three columns in the current row
             for (int i = 1; i < TimerGridView.SUM_COLUMN_INDEX; i++)
@@ -117,13 +118,14 @@ namespace MKTimer
                     if (parsed_time != 0) {
                         lapTimes[i-1] = parsed_time;
                         sum += parsed_time;
-                        this.timerGridView[i, rowIndex].Value = TimeParser.GetTimeString(parsed_time);
+                        timerGridView[i, rowIndex].Value = TimeParser.GetTimeString(parsed_time);
 
                         // Update sob
                         if (sob != null && sob.laps != null && sob.laps[i-1] > parsed_time) 
                         {
                             sob.laps[i-1] = parsed_time;
                             timerGridView.sob = sob;
+                            trackInfo.sob = sob;
                             timerGridView.fillRowWithRun(2, timerGridView.sob);
                         }
                     } else {
@@ -136,11 +138,12 @@ namespace MKTimer
 
             // Update the value of the Sum column in the current row
             if (allFilled) {
-                this.timerGridView[TimerGridView.SUM_COLUMN_INDEX, rowIndex].Value = TimeParser.GetTimeString(sum);
-                this.timerGridView.updateSb(lapTimes);
+                timerGridView[TimerGridView.SUM_COLUMN_INDEX, rowIndex].Value = TimeParser.GetTimeString(sum);
+                timerGridView.updateSb(lapTimes);
 
                 if (sob == null){
                     timerGridView.sob = new Run(lapTimes);
+                    trackInfo.sob = new Run(lapTimes);
                     timerGridView.fillRowWithRun(2, timerGridView.sob);
                 } 
             } else {
@@ -150,16 +153,12 @@ namespace MKTimer
 
         private void savePbClick(object sender, EventArgs e)
         {
-            if (timerGridView.sbRun != null && (timerGridView.pbRun == null || timerGridView.pbRun.GetTotalTime() >= timerGridView.sbRun.GetTotalTime())) {
-                this.timerGridView.pbRun = timerGridView.sbRun;
-                this.timerGridView.fillRowWithRun(0, this.timerGridView.pbRun);
-                PBParser.UpdatePbRun(trackInfo);
+            if (timerGridView.sbRun != null && (trackInfo.pb == null || trackInfo.pb.GetTotalTime() >= timerGridView.sbRun.GetTotalTime())) {
+                timerGridView.pbRun = timerGridView.sbRun;
+                trackInfo.pb = timerGridView.pbRun;
+                this.timerGridView.fillRowWithRun(0, timerGridView.pbRun);
             }
-
-            if (timerGridView.sob != null)
-            {
-                PBParser.UpdateSobRun(trackInfo);
-            }
+            trackInfo.StoreInformation();
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)

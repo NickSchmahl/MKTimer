@@ -7,7 +7,7 @@ namespace MKTimer {
         private readonly Label runCountLabel = new();
         private readonly Label timerLabel = new();
         public readonly Timer timer = new();
-        private int secondsCounter = 0;
+        public static int secondsCounter = 0;
         private readonly int baseCount;
 
         public RunCountPanel(int baseCount, int baseSecondsPlayed) 

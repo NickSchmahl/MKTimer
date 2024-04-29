@@ -19,5 +19,12 @@ namespace MKTimer {
             if (laps.Contains(null)) return null;
             else return laps.Sum();
         }
+
+        public Run Copy()
+        {
+            var newLaps = new double?[lap_count];
+            laps.CopyTo(newLaps, 0);
+            return new Run(newLaps);
+        }
     }
 }
