@@ -33,15 +33,15 @@ namespace MKTimer
                 if ((value3 < 100 && startZeros == 0) || (value3 < 10 && startZeros == 1)) value3 *= 10;
                 millis = value3;
             } 
-            else if (parts[2].Contains('x'))
+            else if (parts[2].Contains('x') || parts[2].Contains('X'))
             {
-                if (parts[2][0] == 'x') xs = 0b00000111;
-                else if (parts[2][1] == 'x') 
+                if (parts[2][0] == 'x' || parts[2][0] == 'X') xs = 0b00000111;
+                else if (parts[2][1] == 'x' || parts[2][1] == 'X') 
                 {
                     xs = 0b00000011;
                     millis = int.Parse(parts[2][0].ToString()) * 100;
                 }
-                else if (parts[2][2] == 'x')
+                else if (parts[2][2] == 'x' || parts[2][2] == 'X')
                 {
                     xs = 0b00000001;
                     millis = int.Parse(parts[2][0].ToString() + parts[2][1].ToString()) * 10;
