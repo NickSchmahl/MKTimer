@@ -67,7 +67,7 @@ namespace MKTimer {
                 { "lap_times", new JArray((pb?.laps ?? []).Select(lap => lap?.ToString())) },
                 { "sob_laps", new JArray((sob?.laps ?? []).Select(lap => lap?.ToString())) },
                 { "run_count", runCount + TimerGridView.RUN_COUNT },
-                { "seconds_played", secondsPlayed + RunCountPanel.secondsCounter }
+                { "seconds_played", RunCountPanel.secondsCounter }
             };
             var jObject = new JObject {
                 { mode.ToString(), innerJObject}
