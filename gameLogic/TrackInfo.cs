@@ -64,8 +64,8 @@ namespace MKTimer {
         public void StoreInformation() 
         {
             var innerJObject = new JObject {
-                { "lap_times", new JArray(pb?.laps ?? []) },
-                { "sob_laps", new JArray(sob?.laps ?? []) },
+                { "lap_times", new JArray((pb?.laps ?? []).Select(lap => lap?.ToString())) },
+                { "sob_laps", new JArray((sob?.laps ?? []).Select(lap => lap?.ToString())) },
                 { "run_count", runCount + TimerGridView.RUN_COUNT },
                 { "seconds_played", secondsPlayed + RunCountPanel.secondsCounter }
             };
@@ -121,27 +121,6 @@ namespace MKTimer {
             }
 
             return new Run(parsed_times);
-        }
-
-        public void LogData() 
-        {
-            if (pb != null) {
-                Console.Write("PB Laps: ");
-                foreach (double? value in pb?.laps ?? [])
-                {
-                    Console.Write(value + ", ");
-                }
-                Console.WriteLine();
-            }
-            if (sob != null) {
-                Console.Write("SoB Laps: ");
-                foreach (double? value in sob?.laps ?? [])
-                {
-                    Console.Write(value + ", ");
-                }
-                Console.WriteLine();
-                Console.WriteLine();
-            }
         }
     }
 }

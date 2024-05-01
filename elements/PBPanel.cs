@@ -71,10 +71,10 @@ namespace MKTimer {
             if (total_time == null) return "-";
             else retString = sbOrPb + " Best: " + TimeParser.GetTimeString((double) total_time) + " (";
             if (run.laps != null) {
-                foreach (double? lap_time in run.laps) 
+                foreach (MKTime? lap_time in run.laps) 
                 {
                     if (lap_time == null) retString += " - | ";
-                    else retString += TimeParser.GetTimeString((double) lap_time) + " | ";
+                    else retString += lap_time.ToString() + " | ";
                 }
                 retString = retString.Remove(retString.Length-2);
                 retString += ") ";

@@ -85,9 +85,9 @@ namespace MKTimer {
             for (int i = 1; i < SUM_COLUMN_INDEX; i++) {
                 if(run.laps != null) 
                 {
-                    double? lap_time = run.laps[i-1];
+                    MKTime? lap_time = run.laps[i-1];
                     if (lap_time == null) this[i, rowIndex].Value = "-";
-                    else this[i, rowIndex].Value = TimeParser.GetTimeString((double) lap_time);
+                    else this[i, rowIndex].Value = lap_time.ToString();
                 }
             }
             double? total_time = run.GetTotalTime();
@@ -95,11 +95,11 @@ namespace MKTimer {
             else this[SUM_COLUMN_INDEX, rowIndex].Value = TimeParser.GetTimeString((double) total_time);
         }
 
-        public void updateSb(double?[] lapTimes) {
+        public void updateSb(MKTime?[] lapTimes) {
             if (sbRun == null && lapTimes != null) {
                 sbRun = new Run(lapTimes);
                 fillRowWithRun(1, sbRun);
-            } else if (lapTimes != null && sbRun != null && lapTimes.Sum() < sbRun.GetTotalTime()) {
+            } else if (lapTimes != null && sbRun != null && lapTimes.Select(lap => lap?.ToDouble()).Sum() < sbRun.GetTotalTime()) {
                 sbRun = new Run(lapTimes);
                 fillRowWithRun(1, sbRun);
             }

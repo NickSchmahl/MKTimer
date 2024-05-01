@@ -77,7 +77,7 @@ namespace MKTimer
 
             string secondsString = seconds < 10 ? "0" + seconds : seconds.ToString();
 
-            return minutesString + secondsString + "," + millisString + "\nxs:" + xs;
+            return minutesString + secondsString + "," + millisString;
         }
 
         public double ToDouble() 

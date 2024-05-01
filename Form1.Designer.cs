@@ -105,7 +105,7 @@ namespace MKTimer
         {
             int rowIndex = e.RowIndex;
             double sum = 0;
-            double?[] lapTimes = new double?[3];
+            MKTime[] lapTimes = new MKTime[3];
             bool allFilled = true;
             Run sob = trackInfo.sob?.Copy();
 
@@ -114,14 +114,14 @@ namespace MKTimer
             {
                 if (this.timerGridView[i, rowIndex].Value != null)
                 {
-                    double parsed_time = TimeParser.ParseTime(this.timerGridView[i, rowIndex].Value.ToString());
-                    if (parsed_time != 0) {
+                    MKTime parsed_time = new(this.timerGridView[i, rowIndex].Value.ToString());
+                    if (parsed_time.ToDouble() != 0) {
                         lapTimes[i-1] = parsed_time;
-                        sum += parsed_time;
-                        timerGridView[i, rowIndex].Value = TimeParser.GetTimeString(parsed_time);
+                        sum += parsed_time.ToDouble();
+                        timerGridView[i, rowIndex].Value = parsed_time.ToString();
 
                         // Update sob
-                        if (sob != null && sob.laps != null && sob.laps[i-1] > parsed_time) 
+                        if (sob != null && sob.laps != null && sob.laps[i-1].ToDouble() > parsed_time.ToDouble()) 
                         {
                             sob.laps[i-1] = parsed_time;
                             timerGridView.sob = sob;
