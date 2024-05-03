@@ -7,11 +7,11 @@ using Newtonsoft.Json.Linq;
 namespace MKTimer {
     public class TrackInfo {
         private const string jsonPath = "./data/tracks.json";
+        private readonly string csvPath;
         public Run? pb;
         public Run? sob;
         public int runCount;
         public int secondsPlayed;
-        public Run[] runs;
         public readonly MK8DLXTrack track;
         public readonly MK8DLXMode mode;
 
@@ -19,6 +19,7 @@ namespace MKTimer {
         {
             this.track = track;
             this.mode = mode;
+            csvPath = "./data/" + track.ToString() + mode.ToString() + ".csv";
 
             string trackName = track.ToString();
             string modeName = mode.ToString();
@@ -39,29 +40,29 @@ namespace MKTimer {
 
             var runs = Array.Empty<Run>();
 
-            string trackTimesPath = "./data/" + trackName + modeName + ".csv";
-            if (File.Exists(trackTimesPath))
+            if (File.Exists(csvPath))
             {
-                string[] runLines = File.ReadAllLines(trackTimesPath);
+                string[] runLines = File.ReadAllLines(csvPath);
                 foreach (string runLine in runLines)
                 {
                     int i = 0;
                     foreach(string runTime in runLine.Split(';')) 
                     {
                         double?[] runTimes = new double?[3];
-                        if (double.TryParse(runTime, out double time)) runTimes[i] = time;
-                        else runTimes[i] = null;
+                        if (i < 3 && double.TryParse(runTime, out double time)) runTimes[i] = time;
 
                         _ = runs.Append(new Run(runTimes));
                         i++;
                     }
                 }
             }
-
-            this.runs = runs;
+            else 
+            {
+                File.Create(csvPath);
+            }
         }
 
-        public void StoreInformation() 
+        public void StoreInformation(List<Run> runs) 
         {
             var innerJObject = new JObject {
                 { "lap_times", new JArray((pb?.laps ?? []).Select(lap => lap?.ToString())) },
@@ -87,6 +88,22 @@ namespace MKTimer {
             }
 
             File.WriteAllText(jsonPath, storedObj.ToString());
+
+            if (!File.Exists(csvPath)) return;
+            string toWrite = "";
+            foreach (Run run in runs) 
+            {
+                foreach (MKTime? time in run.laps) 
+                {
+                    if (time == null) toWrite += "-";
+                    else toWrite += time.ToString();
+                    toWrite += ";";
+                }
+                toWrite += "\n";
+            }
+            Console.Write("Wanna write something: " + toWrite);
+
+            File.AppendAllText(csvPath, toWrite);
         }
 
         private static Run? ParseLapTimes(JArray? jsonArray) 

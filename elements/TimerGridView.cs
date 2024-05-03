@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -12,14 +13,12 @@ namespace MKTimer {
         public Run? pbRun;
         public Run? sbRun;
         public Run? sob;
-        private MK8DLXTrack track;
-        private MK8DLXMode mode;
+        public List<Run> runs;
         public RunCountPanel? runCountPanel;
 
         public TimerGridView(TrackInfo trackInfo) {
-            track = trackInfo.track;
-            mode = trackInfo.mode;
             RUN_COUNT = 0;
+            runs = [new Run(SUM_COLUMN_INDEX-1)];
 
             ((System.ComponentModel.ISupportInitialize) this).BeginInit();
             SuspendLayout();
@@ -108,6 +107,7 @@ namespace MKTimer {
         private void UserAddedRowHandler(object? sender, DataGridViewRowEventArgs e)
         {
             RUN_COUNT++;
+            runs.Add(new Run(SUM_COLUMN_INDEX-1));
 
             e.Row.Cells[0].Value = e.Row.Index - 2;
             e.Row.Cells[0].Style.BackColor = Color.LightGray;

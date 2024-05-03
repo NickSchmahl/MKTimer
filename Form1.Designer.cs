@@ -119,6 +119,7 @@ namespace MKTimer
                         lapTimes[i-1] = parsed_time;
                         sum += parsed_time.ToDouble();
                         timerGridView[i, rowIndex].Value = parsed_time.ToString();
+                        timerGridView.runs[rowIndex-3].laps[i-1] = parsed_time;
 
                         // Update sob
                         if (sob != null && sob.laps != null && sob.laps[i-1].ToDouble() > parsed_time.ToDouble()) 
@@ -158,7 +159,7 @@ namespace MKTimer
                 trackInfo.pb = timerGridView.pbRun;
                 this.timerGridView.fillRowWithRun(0, timerGridView.pbRun);
             }
-            trackInfo.StoreInformation();
+            trackInfo.StoreInformation(timerGridView.runs);
         }
 
         private void Form1_MouseClick(object sender, MouseEventArgs e)
