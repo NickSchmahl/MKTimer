@@ -24,6 +24,12 @@ namespace MKTimer
             if (int.TryParse(parts[0], out int value)) minutes = value;
             if (int.TryParse(parts[1], out int value2)) seconds = value2;
 
+            if (seconds > 60) 
+            {
+                minutes += seconds / 60;
+                seconds %= 60;
+            }
+
             int startZeros = 0;
             if (parts[2].Length > 0 && parts[2][0].Equals('0')) startZeros++;
             if (parts[2].Length > 1 && parts[2][0].Equals('0') && parts[2][1].Equals('0')) startZeros++;
