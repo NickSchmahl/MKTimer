@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MKTimer {
     public class TrackInfo {
-        private const string jsonPath = "./data/tracks.json";
+        private const string jsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
         private readonly string csvPath;
         public Run? pb;
         public Run? sob;
@@ -19,13 +19,13 @@ namespace MKTimer {
         {
             this.track = track;
             this.mode = mode;
-            csvPath = "./data/" + track.ToString() + mode.ToString() + ".csv";
+            csvPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\" + track + mode + ".csv";
 
             string trackName = track.ToString();
             string modeName = mode.ToString();
             JObject jsonObject = JObject.Parse(File.ReadAllText(jsonPath));
 
-            if (jsonObject.ContainsKey(trackName.ToString()) && jsonObject[trackName]?[modeName] != null)
+            if (jsonObject.ContainsKey(trackName) && jsonObject[trackName]?[modeName] != null)
             {
                 JArray? lapTimesToken = (JArray?) jsonObject[trackName]?[modeName]?["lap_times"];
                 JArray? sobLapsToken = (JArray?) jsonObject[trackName]?[modeName]?["sob_laps"];
@@ -56,7 +56,7 @@ namespace MKTimer {
                     }
                 }
             }
-            else 
+            else
             {
                 File.Create(csvPath);
             }

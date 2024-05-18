@@ -8,15 +8,15 @@ namespace MKTimer
     public partial class Form1 : Form
     {
         private static Form1? activeForm;
-        private static readonly string startFile = "./data/start.json";
+        private static readonly string startFile = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\start.json";
 
         public Form1()
         {   
             const string trackJsonKey = "track";
             const string modeJsonKey = "mode";
 
-            MK8DLXTrack track = MK8DLXTrack.WiiMooMooMeadows;
-            MK8DLXMode mode = MK8DLXMode._200CC;
+            var track = MK8DLXTrack.WiiMooMooMeadows;
+            var mode = MK8DLXMode._200CC;
 
             if (File.Exists(startFile))
             {

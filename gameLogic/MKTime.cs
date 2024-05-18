@@ -1,13 +1,11 @@
-using Accessibility;
-
-namespace MKTimer 
+namespace MKTimer
 {
     public class MKTime
     {
-        public int minutes;
-        public int seconds;
-        public int millis;
-        public byte xs;
+        private int minutes;
+        private int seconds;
+        private int millis;
+        private byte xs;
 
         public MKTime(string time)
         {
@@ -96,8 +94,7 @@ namespace MKTimer
                 1 => (millis + 9) / 1000.0,
                 _ => millis / 1000.0,
             };
-            ;
-
+            
             return res;
         }
     }    
