@@ -10,6 +10,7 @@ namespace MKTimer {
         private readonly string csvPath;
         public Run? pb;
         public Run? sob;
+        public Run[] Runs;
         public int runCount;
         public int secondsPlayed;
         public readonly MK8DLXTrack track;
@@ -46,7 +47,7 @@ namespace MKTimer {
                 foreach (string runLine in runLines)
                 {
                     int i = 0;
-                    foreach(string runTime in runLine.Split(';')) 
+                    foreach (string runTime in runLine.Split(';'))
                     {
                         double?[] runTimes = new double?[3];
                         if (i < 3 && double.TryParse(runTime, out double time)) runTimes[i] = time;
@@ -60,6 +61,8 @@ namespace MKTimer {
             {
                 File.Create(csvPath);
             }
+
+            Runs = runs;
         }
 
         public void StoreInformation(List<Run> runs) 
