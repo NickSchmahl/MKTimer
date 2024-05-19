@@ -1,22 +1,23 @@
 using System.Linq;
 using System.Threading;
+using MKTimer.gameLogic;
 
 namespace MKTimer {
     public class Run {
         public int lap_count;
-        public MKTime?[] laps;
+        public MkTime?[] laps;
 
         public Run(int lap_count) {
             this.lap_count = lap_count;
-            laps = new MKTime?[lap_count];
+            laps = new MkTime?[lap_count];
         }
 
         public Run(double?[] laps) {
             lap_count = laps.Length;
-            this.laps = laps.Select(lap => new MKTime(lap)).ToArray();
+            this.laps = laps.Select(lap => new MkTime(lap)).ToArray();
         }
 
-        public Run(MKTime?[] laps) {
+        public Run(MkTime?[] laps) {
             lap_count = laps.Length;
             this.laps = laps;
         }
@@ -28,7 +29,7 @@ namespace MKTimer {
 
         public Run Copy()
         {
-            var newLaps = new MKTime?[lap_count];
+            var newLaps = new MkTime?[lap_count];
             laps.CopyTo(newLaps, 0);
             return new Run(newLaps.Select(lap => lap?.ToDouble()).ToArray());
         }

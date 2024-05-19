@@ -4,54 +4,54 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
-namespace MKTimer {
+namespace MKTimer.gameLogic {
     public class TrackInfo {
-        private const string jsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
-        private readonly string csvPath;
-        public Run? pb;
-        public Run? sob;
-        public Run[] Runs;
-        public int runCount;
-        public int secondsPlayed;
-        public readonly MK8DLXTrack track;
-        public readonly MK8DLXMode mode;
+        private const string JsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
+        private readonly string _csvPath;
+        public Run? Pb;
+        public Run? Sob;
+        public readonly Run[] Runs;
+        public readonly int RunCount;
+        public readonly int SecondsPlayed;
+        public readonly MK8DLXTrack Track;
+        public readonly MK8DLXMode Mode;
 
         public TrackInfo(MK8DLXTrack track, MK8DLXMode mode)
         {
-            this.track = track;
-            this.mode = mode;
-            csvPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\" + track + mode + ".csv";
+            Track = track;
+            Mode = mode;
+            _csvPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\" + track + mode + ".csv";
 
-            string trackName = track.ToString();
-            string modeName = mode.ToString();
-            JObject jsonObject = JObject.Parse(File.ReadAllText(jsonPath));
+            var trackName = track.ToString();
+            var modeName = mode.ToString();
+            var jsonObject = JObject.Parse(File.ReadAllText(JsonPath));
 
+            var secondsPlayedToken = (JValue?) jsonObject[trackName]?[modeName]?["seconds_played"];
             if (jsonObject.ContainsKey(trackName) && jsonObject[trackName]?[modeName] != null)
             {
-                JArray? lapTimesToken = (JArray?) jsonObject[trackName]?[modeName]?["lap_times"];
-                JArray? sobLapsToken = (JArray?) jsonObject[trackName]?[modeName]?["sob_laps"];
-                JValue? runCountToken = (JValue?) jsonObject[trackName]?[modeName]?["run_count"];
-                JValue? secondsPlayedToken = (JValue?) jsonObject[trackName]?[modeName]?["seconds_played"];
-                
-                pb = ParseLapTimes(lapTimesToken);
-                sob = ParseLapTimes(sobLapsToken);
-                runCount = runCountToken?.Value<int>() ?? 0;
-                secondsPlayed = secondsPlayedToken?.Value<int>() ?? 0;
+                var lapTimesToken = (JArray?) jsonObject[trackName]?[modeName]?["lap_times"];
+                var sobLapsToken = (JArray?) jsonObject[trackName]?[modeName]?["sob_laps"];
+                var runCountToken = (JValue?) jsonObject[trackName]?[modeName]?["run_count"];
+
+                Pb = ParseLapTimes(lapTimesToken);
+                Sob = ParseLapTimes(sobLapsToken);
+                RunCount = runCountToken?.Value<int>() ?? 0;
+                SecondsPlayed = secondsPlayedToken?.Value<int>() ?? 0;
             }
 
             var runs = new List<Run>();
 
-            if (File.Exists(csvPath))
+            if (File.Exists(_csvPath))
             {
-                string[] runLines = File.ReadAllLines(csvPath);
-                foreach (string runLine in runLines)
+                var runLines = File.ReadAllLines(_csvPath);
+                foreach (var runLine in runLines)
                 {
-                    MKTime?[] runTimes = new MKTime?[3];
+                    var runTimes = new MkTime?[3];
                     
-                    int i = 0;
-                    foreach (string runTime in runLine.Split(';'))
+                    var i = 0;
+                    foreach (var runTime in runLine.Split(';'))
                     {
-                        if (i < 3) runTimes[i] = new MKTime(runTime);
+                        if (i < 3) runTimes[i] = new MkTime(runTime);
                         i++;
                     }
                     
@@ -60,7 +60,7 @@ namespace MKTimer {
             }
             else
             {
-                File.Create(csvPath);
+                File.Create(_csvPath);
             }
 
             Runs = runs.ToArray();
@@ -69,35 +69,35 @@ namespace MKTimer {
         public void StoreInformation(List<Run> runs) 
         {
             var innerJObject = new JObject {
-                { "lap_times", new JArray((pb?.laps ?? []).Select(lap => lap?.ToString())) },
-                { "sob_laps", new JArray((sob?.laps ?? []).Select(lap => lap?.ToString())) },
-                { "run_count", runCount + TimerGridView.RUN_COUNT },
+                { "lap_times", new JArray((Pb?.laps ?? []).Select(lap => lap?.ToString())) },
+                { "sob_laps", new JArray((Sob?.laps ?? []).Select(lap => lap?.ToString())) },
+                { "run_count", RunCount + TimerGridView.RUN_COUNT },
                 { "seconds_played", RunCountPanel.secondsCounter }
             };
             var jObject = new JObject {
-                { mode.ToString(), innerJObject}
+                { Mode.ToString(), innerJObject}
             };
 
-            if (!File.Exists(jsonPath)) return;
+            if (!File.Exists(JsonPath)) return;
 
-            var storedObj = JObject.Parse(File.ReadAllText(jsonPath));
+            var storedObj = JObject.Parse(File.ReadAllText(JsonPath));
             
-            if (!storedObj.ContainsKey(track.ToString())) {
-                storedObj.Add(track.ToString(), jObject);
+            if (!storedObj.ContainsKey(Track.ToString())) {
+                storedObj.Add(Track.ToString(), jObject);
             }
-            else if (storedObj[track.ToString()]?[mode.ToString()] == null) {
-                ((JObject?) storedObj[track.ToString()])?.Add(jObject);
+            else if (storedObj[Track.ToString()]?[Mode.ToString()] == null) {
+                ((JObject?) storedObj[Track.ToString()])?.Add(jObject);
             } else {
-                storedObj[track.ToString()]?[mode.ToString()]?.Replace(innerJObject);
+                storedObj[Track.ToString()]?[Mode.ToString()]?.Replace(innerJObject);
             }
 
-            File.WriteAllText(jsonPath, storedObj.ToString());
+            File.WriteAllText(JsonPath, storedObj.ToString());
 
-            if (!File.Exists(csvPath)) return;
-            string toWrite = "";
-            foreach (Run run in runs) 
+            if (!File.Exists(_csvPath)) return;
+            var toWrite = "";
+            foreach (var run in runs) 
             {
-                foreach (MKTime? time in run.laps) 
+                foreach (var time in run.laps) 
                 {
                     if (time == null) toWrite += "-";
                     else toWrite += time.ToString();
@@ -107,7 +107,7 @@ namespace MKTimer {
             }
             Console.Write("Wanna write something: " + toWrite);
 
-            File.AppendAllText(csvPath, toWrite);
+            File.AppendAllText(_csvPath, toWrite);
         }
 
         private static Run? ParseLapTimes(JArray? jsonArray) 
@@ -115,33 +115,38 @@ namespace MKTimer {
             if (jsonArray == null) return null;
 
             // Create a list to store the parsed doubles
-            double?[] parsed_times = new double?[3];
+            var parsedTimes = new double?[3];
 
             // Iterate through the array, parse each item to a double, and add it to the list
-            int index = 0;
-            foreach (JToken token in jsonArray)
+            var index = 0;
+            foreach (var token in jsonArray)
             {
-                if (token.Type == JTokenType.String)
+                switch (token.Type)
                 {
-                    string? stringValue = (string?)token;
-                    if (stringValue != null) parsed_times[index] = TimeParser.ParseTime(stringValue);
-                    else parsed_times[index] = null;
+                    case JTokenType.String:
+                    {
+                        var stringValue = (string?)token;
+                        if (stringValue != null) parsedTimes[index] = TimeParser.ParseTime(stringValue);
+                        else parsedTimes[index] = null;
+                        break;
+                    }
+                    case JTokenType.Float:
+                    {
+                        var doubleValue = (double?)token;
+                        if (doubleValue != null) parsedTimes[index] = doubleValue;
+                        else parsedTimes[index] = null;
+                        break;
+                    }
+                    default:
+                        Console.WriteLine($"Warning: Skipping non-string value: {token}");
+                        parsedTimes[index] = null;
+                        break;
                 }
-                else if (token.Type == JTokenType.Float)
-                {
-                    double? doubleValue = (double?)token;
-                    if (doubleValue != null) parsed_times[index] = doubleValue;
-                    else parsed_times[index] = null;
-                }
-                else
-                {
-                    Console.WriteLine($"Warning: Skipping non-string value: {token}");
-                    parsed_times[index] = null;
-                }
+
                 index++;
             }
 
-            return new Run(parsed_times);
+            return new Run(parsedTimes);
         }
     }
 }

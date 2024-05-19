@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MKTimer.gameLogic;
 
 namespace MKTimer {
     public class TimerGridView: DataGridView {
@@ -57,9 +58,9 @@ namespace MKTimer {
             this[0,0].Value = "PB";
             this[0,1].Value = "SB";
             this[0,2].Value = "SoB";
-            pbRun = trackInfo.pb;
+            pbRun = trackInfo.Pb;
             if (pbRun != null) fillRowWithRun(0, pbRun);
-            sob = trackInfo.sob;
+            sob = trackInfo.Sob;
             if (sob != null) fillRowWithRun(2, sob);
 
             Rows[0].Frozen = true;
@@ -84,7 +85,7 @@ namespace MKTimer {
             for (int i = 1; i < SUM_COLUMN_INDEX; i++) {
                 if(run.laps != null) 
                 {
-                    MKTime? lap_time = run.laps[i-1];
+                    MkTime? lap_time = run.laps[i-1];
                     if (lap_time == null) this[i, rowIndex].Value = "-";
                     else this[i, rowIndex].Value = lap_time.ToString();
                 }
@@ -94,7 +95,7 @@ namespace MKTimer {
             else this[SUM_COLUMN_INDEX, rowIndex].Value = TimeParser.GetTimeString((double) total_time);
         }
 
-        public void updateSb(MKTime?[] lapTimes) {
+        public void updateSb(MkTime?[] lapTimes) {
             if (sbRun == null && lapTimes != null) {
                 sbRun = new Run(lapTimes);
                 fillRowWithRun(1, sbRun);

@@ -4,6 +4,8 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System;
 using System.Linq;
+using MKTimer.elements;
+using MKTimer.gameLogic;
 
 namespace MKTimer
 {
@@ -85,7 +87,7 @@ namespace MKTimer
 
         private void initializeRunCountPanel() 
         {
-            runCountPanel = new RunCountPanel(trackInfo.runCount, trackInfo.secondsPlayed) {
+            runCountPanel = new RunCountPanel(trackInfo.RunCount, trackInfo.SecondsPlayed) {
                 Location = new Point(0, 50),
                 Size = new Size(timerGridView.Size.Width, 50)
             };
@@ -97,7 +99,7 @@ namespace MKTimer
 
         private void initializeTrackSelectionPanel()
         {
-            trackSelectionPanel = new TrackSelectionPanel(trackInfo.track, trackInfo.mode);
+            trackSelectionPanel = new TrackSelectionPanel(trackInfo.Track, trackInfo.Mode);
             trackSelectionPanel.Location = new Point(0, 0);
             trackSelectionPanel.Size = new Size(timerGridView.Size.Width, 50);
             trackSelectionPanel.arrangeLabels();
@@ -111,16 +113,16 @@ namespace MKTimer
         {
             int rowIndex = e.RowIndex;
             double sum = 0;
-            MKTime[] lapTimes = new MKTime[3];
+            MkTime[] lapTimes = new MkTime[3];
             bool allFilled = true;
-            Run sob = trackInfo.sob?.Copy();
+            Run sob = trackInfo.Sob?.Copy();
 
             // Calculate the sum of the first three columns in the current row
             for (int i = 1; i < TimerGridView.SUM_COLUMN_INDEX; i++)
             {
                 if (this.timerGridView[i, rowIndex].Value != null)
                 {
-                    MKTime parsed_time = new(this.timerGridView[i, rowIndex].Value.ToString());
+                    MkTime parsed_time = new(this.timerGridView[i, rowIndex].Value.ToString());
                     if (parsed_time.ToDouble() != 0) {
                         lapTimes[i-1] = parsed_time;
                         sum += parsed_time.ToDouble();
@@ -132,7 +134,7 @@ namespace MKTimer
                         {
                             sob.laps[i-1] = parsed_time;
                             timerGridView.sob = sob;
-                            trackInfo.sob = sob;
+                            trackInfo.Sob = sob;
                             timerGridView.fillRowWithRun(2, timerGridView.sob);
                         }
                     } else {
@@ -150,7 +152,7 @@ namespace MKTimer
 
                 if (sob == null){
                     timerGridView.sob = new Run(lapTimes);
-                    trackInfo.sob = new Run(lapTimes);
+                    trackInfo.Sob = new Run(lapTimes);
                     timerGridView.fillRowWithRun(2, timerGridView.sob);
                 } 
             } else {
@@ -160,9 +162,9 @@ namespace MKTimer
 
         private void savePbClick(object sender, EventArgs e)
         {
-            if (timerGridView.sbRun != null && (trackInfo.pb == null || trackInfo.pb.GetTotalTime() >= timerGridView.sbRun.GetTotalTime())) {
+            if (timerGridView.sbRun != null && (trackInfo.Pb == null || trackInfo.Pb.GetTotalTime() >= timerGridView.sbRun.GetTotalTime())) {
                 timerGridView.pbRun = timerGridView.sbRun;
-                trackInfo.pb = timerGridView.pbRun;
+                trackInfo.Pb = timerGridView.pbRun;
                 this.timerGridView.fillRowWithRun(0, timerGridView.pbRun);
             }
             trackInfo.StoreInformation(timerGridView.runs);
@@ -180,8 +182,8 @@ namespace MKTimer
         private void FormClosedAction(object sender, FormClosedEventArgs e)
         {
             JObject startupRun = new JObject {
-                { "track", trackInfo.track.ToString() },
-                { "mode", trackInfo.mode.ToString() }
+                { "track", trackInfo.Track.ToString() },
+                { "mode", trackInfo.Mode.ToString() }
             };
             if (File.Exists(startFile)) File.WriteAllText(startFile, startupRun.ToString());
             else Console.WriteLine("Couldn't find start.json");

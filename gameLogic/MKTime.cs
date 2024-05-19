@@ -1,114 +1,112 @@
-using System.Diagnostics;
-
-namespace MKTimer
+namespace MKTimer.gameLogic
 {
-    public class MKTime
+    public class MkTime
     {
-        public int minutes { get; }
-        public int seconds { get; }
-        public int millis { get; }
-        public byte xs { get; }
+        public int Minutes { get; }
+        public int Seconds { get; }
+        public int Millis { get; }
+        public byte Xs { get; }
 
-        public MKTime(string time)
+        public MkTime(string time)
         {
-            minutes = 0;
-            seconds = 0;
-            millis = 0;
-            xs = 0;
+            Minutes = 0;
+            Seconds = 0;
+            Millis = 0;
+            Xs = 0;
 
             if (!time.Contains(':')) time = "0:" + time;
             if (!time.Contains(',')) time += ",0";
 
-            string[] parts = time.Split(':', ',');
+            var parts = time.Split(':', ',');
 
-            if (int.TryParse(parts[0], out int value)) minutes = value;
-            if (int.TryParse(parts[1], out int value2)) seconds = value2;
+            if (int.TryParse(parts[0], out var value)) Minutes = value;
+            if (int.TryParse(parts[1], out var value2)) Seconds = value2;
 
-            if (seconds > 60)
+            if (Seconds > 60)
             {
-                minutes += seconds / 60;
-                seconds %= 60;
+                Minutes += Seconds / 60;
+                Seconds %= 60;
             }
 
-            int startZeros = 0;
+            var startZeros = 0;
             if (parts[2].Length > 0 && parts[2][0].Equals('0')) startZeros++;
             if (parts[2].Length > 1 && parts[2][0].Equals('0') && parts[2][1].Equals('0')) startZeros++;
-            if (int.TryParse(parts[2], out int value3))
+            if (int.TryParse(parts[2], out var value3))
             {
                 if (value3 < 10 && startZeros == 0) value3 *= 100;
                 if ((value3 < 100 && startZeros == 0) || (value3 < 10 && startZeros == 1)) value3 *= 10;
-                millis = value3;
+                Millis = value3;
             }
             else if (parts[2].Contains('x') || parts[2].Contains('X'))
             {
-                if (parts[2][0] == 'x' || parts[2][0] == 'X') xs = 0b00000111;
+                if (parts[2][0] == 'x' || parts[2][0] == 'X') Xs = 0b00000111;
                 else if (parts[2][1] == 'x' || parts[2][1] == 'X')
                 {
-                    xs = 0b00000011;
-                    millis = int.Parse(parts[2][0].ToString()) * 100;
+                    Xs = 0b00000011;
+                    Millis = int.Parse(parts[2][0].ToString()) * 100;
                 }
                 else if (parts[2][2] == 'x' || parts[2][2] == 'X')
                 {
-                    xs = 0b00000001;
-                    millis = int.Parse(parts[2][0].ToString() + parts[2][1].ToString()) * 10;
+                    Xs = 0b00000001;
+                    Millis = int.Parse(parts[2][0] + parts[2][1].ToString()) * 10;
                 }
             }
         }
 
-        public MKTime(double? time)
+        public MkTime(double? time)
         {
             if (time == null) return;
 
-            minutes = (int)time / 60;
-            seconds = (int)time % 60;
-            millis = ((int)(time * 1000)) % 1000;
+            Minutes = (int)time / 60;
+            Seconds = (int)time % 60;
+            Millis = (int)(time * 1000) % 1000;
         }
 
         public override string ToString()
         {
-            string millisString = xs switch
+            var millisString = Xs switch
             {
                 7 => "xxx",
-                3 => (millis / 100) + "xx",
-                1 => (millis / 10) + "x",
-                _ => millis switch
+                3 => (Millis / 100) + "xx",
+                1 => (Millis / 10) + "x",
+                _ => Millis switch
                 {
-                    < 10 => "00" + millis,
-                    < 100 => "0" + millis,
-                    _ => millis.ToString()
+                    < 10 => "00" + Millis,
+                    < 100 => "0" + Millis,
+                    _ => Millis.ToString()
                 }
             };
 
-            string minutesString = minutes == 0 ? "" : minutes.ToString() + ":";
+            var minutesString = Minutes == 0 ? "" : Minutes + ":";
 
-            string secondsString = seconds < 10 ? "0" + seconds : seconds.ToString();
+            var secondsString = Seconds < 10 ? "0" + Seconds : Seconds.ToString();
 
             return minutesString + secondsString + "," + millisString;
         }
 
         public double ToDouble()
         {
-            double res = minutes * 60 + seconds;
-            res += xs switch
+            double res = Minutes * 60 + Seconds;
+            res += Xs switch
             {
                 7 => 0.999,
-                3 => (millis + 99) / 1000.0,
-                1 => (millis + 9) / 1000.0,
-                _ => millis / 1000.0,
+                3 => (Millis + 99) / 1000.0,
+                1 => (Millis + 9) / 1000.0,
+                _ => Millis / 1000.0,
             };
 
             return res;
         }
 
-        public bool Matches(MKTime? that)
+        public bool Matches(MkTime? that)
         {
             if (that == null) return false;
-            if (seconds != that.seconds || minutes != that.minutes) return false;
-            return xs switch
+            if (Seconds != that.Seconds || Minutes != that.Minutes) return false;
+            return Xs switch
             {
-                0 => millis == that.millis,
-                1 => millis / 10 == that.millis / 10,
-                3 => millis / 100 == that.millis / 100,
+                0 => Millis == that.Millis,
+                1 => Millis / 10 == that.Millis / 10,
+                3 => Millis / 100 == that.Millis / 100,
                 7 => true,
                 _ => false
             };

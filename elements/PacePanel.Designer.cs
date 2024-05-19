@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
+using MKTimer.gameLogic;
 
-namespace MKTimer;
+namespace MKTimer.elements;
 
 partial class PacePanel
 {
@@ -38,12 +37,12 @@ partial class PacePanel
         AutoSize = true;
 
         // Consists of 4 lists for each segment with the goal times
-        List<MKTime>[] goals = {[], [], [], []};
+        List<MkTime>[] goals = {[], [], [], []};
         
-        goals[0].Add(new MKTime("22,8xx"));
-        goals[1].Add(new MKTime("21,6xx"));
-        goals[2].Add(new MKTime("21,6xx"));
-        goals[3].Add(new MKTime("1:05,xxx"));
+        goals[0].Add(new MkTime("22,8xx"));
+        goals[1].Add(new MkTime("21,6xx"));
+        goals[2].Add(new MkTime("21,6xx"));
+        goals[3].Add(new MkTime("1:05,xxx"));
 
         CreateSegment(goals, trackInfo.Runs);
     }

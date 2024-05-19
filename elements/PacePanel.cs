@@ -2,8 +2,9 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using MKTimer.gameLogic;
 
-namespace MKTimer;
+namespace MKTimer.elements;
 
 public partial class PacePanel : Panel
 {
@@ -12,7 +13,7 @@ public partial class PacePanel : Panel
         InitializeComponent(trackInfo);
     }
 
-    private void CreateSegment(List<MKTime>[] goals, Run[] runs)
+    private void CreateSegment(List<MkTime>[] goals, Run[] runs)
     {
         var segmentCounter = 0;
         foreach (var times in goals)
@@ -26,10 +27,9 @@ public partial class PacePanel : Panel
             var counter = 0;
             foreach (var time in times)
             {
-                int occurrences;
-                occurrences = segmentCounter < 3 
+                var occurrences = segmentCounter < 3 
                     ? runs.Select(run => time.Matches(run.laps[segmentCounter])).Count(isTrue => isTrue) 
-                    : runs.Select(run => time.Matches(new MKTime(run.GetTotalTime()))).Count(isTrue => isTrue);
+                    : runs.Select(run => time.Matches(new MkTime(run.GetTotalTime()))).Count(isTrue => isTrue);
                 
                 var label = new Label()
                 {
