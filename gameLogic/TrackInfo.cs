@@ -39,22 +39,23 @@ namespace MKTimer {
                 secondsPlayed = secondsPlayedToken?.Value<int>() ?? 0;
             }
 
-            var runs = Array.Empty<Run>();
+            var runs = new List<Run>();
 
             if (File.Exists(csvPath))
             {
                 string[] runLines = File.ReadAllLines(csvPath);
                 foreach (string runLine in runLines)
                 {
+                    MKTime?[] runTimes = new MKTime?[3];
+                    
                     int i = 0;
                     foreach (string runTime in runLine.Split(';'))
                     {
-                        double?[] runTimes = new double?[3];
-                        if (i < 3 && double.TryParse(runTime, out double time)) runTimes[i] = time;
-
-                        _ = runs.Append(new Run(runTimes));
+                        if (i < 3) runTimes[i] = new MKTime(runTime);
                         i++;
                     }
+                    
+                    runs.Add(new Run(runTimes));
                 }
             }
             else
@@ -62,7 +63,7 @@ namespace MKTimer {
                 File.Create(csvPath);
             }
 
-            Runs = runs;
+            Runs = runs.ToArray();
         }
 
         public void StoreInformation(List<Run> runs) 

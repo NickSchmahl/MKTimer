@@ -14,6 +14,7 @@ namespace MKTimer
         private RunCountPanel runCountPanel;
         private PopUpMenu popUpMenu;
         private TrackInfo trackInfo;
+        private PacePanel PacePanel;
 
         private System.ComponentModel.IContainer components = null;
 
@@ -32,12 +33,17 @@ namespace MKTimer
 
         private void InitializeComponent()
         {
+            // Components
             initializeTimerGridView();
             initializeTrackSelectionPanel();
             initializeRunCountPanel();
             timerGridView.runCountPanel = runCountPanel;
 
             popUpMenu = new(this);
+
+            PacePanel = new PacePanel(trackInfo);
+            PacePanel.Location = new Point(100, 600);
+            Controls.Add(PacePanel);
 
             // MouseClickAction
             MouseClick += Form1_MouseClick;
