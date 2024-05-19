@@ -37,25 +37,24 @@ namespace MKTimer.elements
                     Location = new Point(segmentCounter * 250, 0)
                 };
 
-                var counter = 0;
-                foreach (var time in times)
+                for (var counter = 0; counter < times.Count; counter++)
                 {
-                    // Calculate the number of occurrences of the time in the runs
-                    var occurrences = segmentCounter < 3
-                        ? runs.Select(run => time.Matches(run.laps[segmentCounter])).Count(isTrue => isTrue)
-                        : runs.Select(run => time.Matches(new MkTime(run.GetTotalTime()))).Count(isTrue => isTrue);
+                    var time = times[counter];
+                    var occurrences = runs.Count(run =>
+                        time.Matches(segmentCounter < 3
+                            ? run.laps[segmentCounter]
+                            : new MkTime(run.GetTotalTime()))
+                    );
 
-                    // Create a new label for each time
-                    var label = new Label()
+                    var label = new Label
                     {
-                        Text = time + ": " + occurrences,
+                        Text = $"{time}: {occurrences}",
                         AutoSize = true,
                         Location = new Point(0, counter * 50),
                     };
                     segment.Controls.Add(label);
-
-                    counter++;
                 }
+
                 Controls.Add(segment);
                 segmentCounter++;
             }
