@@ -71,6 +71,12 @@ namespace MKTimer
             initializePacePanel();
             timerGridView.runCountPanel = runCountPanel;
         }
+        
+        public void UpdatePacePanel()
+        {
+            Controls.Remove(PacePanel);
+            initializePacePanel();
+        }
 
         private void initializeTimerGridView()
         {

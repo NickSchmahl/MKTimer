@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using MKTimer.gameLogic;
 
@@ -6,15 +7,26 @@ namespace MKTimer.elements;
 
 public partial class PaceChooseForm : Form
 {
+    private readonly Form1 _mainForm;
     private ComboBox _comboBoxTrack;
     private ComboBox _comboBoxMode;
     private readonly TextBox[,] _textBoxes = new TextBox[4, 4];
     
-    public PaceChooseForm(TrackInfo trackInfo)
+    public PaceChooseForm(Form1 mainForm)
     {
+        _mainForm = mainForm;
         _comboBoxTrack = new();
         _comboBoxMode = new();
-        InitializeComponent(trackInfo);
+        InitializeComponent(mainForm.trackInfo);
+
+    }
+    
+    protected override void OnFormClosed(FormClosedEventArgs e)
+    {
+        base.OnFormClosed(e);
+
+        // Your code here
+        _mainForm.UpdatePacePanel();
     }
 
     private void InitializeTextBoxes()

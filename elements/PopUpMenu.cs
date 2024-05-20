@@ -34,7 +34,7 @@ namespace MKTimer
                 }
                 else if (sender == _paceChoose)
                 {
-                    var newForm = new PaceChooseForm(mainForm.trackInfo);
+                    var newForm = new PaceChooseForm(mainForm);
                     newForm.AutoSize = true;
                     newForm.ShowDialog();
                 }

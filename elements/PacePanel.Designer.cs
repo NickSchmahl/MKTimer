@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using MKTimer.gameLogic;
+using Newtonsoft.Json.Linq;
 
 namespace MKTimer.elements;
 
@@ -36,11 +38,30 @@ partial class PacePanel
         components = new System.ComponentModel.Container();
         AutoSize = true;
 
-        // Consists of 4 lists for each segment with the goal times
-        _goals[0].Add(new MkTime("22,8xx"), 0);
-        _goals[1].Add(new MkTime("21,6xx"), 0);
-        _goals[2].Add(new MkTime("21,6xx"), 0);
-        _goals[3].Add(new MkTime("1:05,xxx"), 0);
+        // Assuming trackInfo is an instance of TrackInfo
+        string trackInTrackInfo = trackInfo.Track.ToString();
+        string modeInTrackInfo = trackInfo.Mode.ToString();
+
+        // Read the existing JSON data
+        var jsonData = File.ReadAllText(TrackInfo.JsonPath);
+        var jsonObject = JObject.Parse(jsonData);
+
+        // Navigate to the paces attribute for the selected track and mode
+        JArray paces = (JArray)jsonObject[trackInTrackInfo][modeInTrackInfo]["paces"];
+
+        // Iterate over each array in paces
+        var segCounter = 0;
+        foreach (JArray paceArray in paces)
+        {
+            // Iterate over each string in the array
+            foreach (string pace in paceArray)
+            {
+                // Add the string to _goals
+                if (pace != "00,000") _goals[segCounter].Add(new MkTime(pace), 0);
+            }
+
+            segCounter++;
+        }
 
         CreateSegments(trackInfo.Runs);
     }
