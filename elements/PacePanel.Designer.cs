@@ -37,14 +37,12 @@ partial class PacePanel
         AutoSize = true;
 
         // Consists of 4 lists for each segment with the goal times
-        List<MkTime>[] goals = {[], [], [], []};
-        
-        goals[0].Add(new MkTime("22,8xx"));
-        goals[1].Add(new MkTime("21,6xx"));
-        goals[2].Add(new MkTime("21,6xx"));
-        goals[3].Add(new MkTime("1:05,xxx"));
+        _goals[0].Add(new MkTime("22,8xx"), 0);
+        _goals[1].Add(new MkTime("21,6xx"), 0);
+        _goals[2].Add(new MkTime("21,6xx"), 0);
+        _goals[3].Add(new MkTime("1:05,xxx"), 0);
 
-        CreateSegment(goals, trackInfo.Runs);
+        CreateSegments(trackInfo.Runs);
     }
 
     #endregion

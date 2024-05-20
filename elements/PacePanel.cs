@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,6 +12,9 @@ namespace MKTimer.elements
     /// </summary>
     public partial class PacePanel : Panel
     {
+        private readonly Dictionary<MkTime, int>[] _goals = [new(), new(), new(), new()];
+        private readonly List<Label>[] _labels = [new(), new(), new(), new()];
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="PacePanel"/> class.
         /// </summary>
@@ -25,10 +29,10 @@ namespace MKTimer.elements
         /// </summary>
         /// <param name="goals">The list of goals for each segment.</param>
         /// <param name="runs">The runs for each segment.</param>
-        private void CreateSegment(List<MkTime>[] goals, Run[] runs)
+        private void CreateSegments(Run[] runs)
         {
             var segmentCounter = 0;
-            foreach (var times in goals)
+            foreach (var times in _goals)
             {
                 // Create a new panel for each segment
                 var segment = new Panel()
@@ -37,26 +41,42 @@ namespace MKTimer.elements
                     Location = new Point(segmentCounter * 250, 0)
                 };
 
-                for (var counter = 0; counter < times.Count; counter++)
+                var counter = 0;
+                foreach (var time in times.Keys)
                 {
-                    var time = times[counter];
                     var occurrences = runs.Count(run =>
                         time.Matches(segmentCounter < 3
                             ? run.laps[segmentCounter]
                             : new MkTime(run.GetTotalTime()))
                     );
+                    
+                    // Store number of occurrences in the dictionary
+                    _goals[segmentCounter][time] = occurrences;
 
                     var label = new Label
                     {
                         Text = $"{time}: {occurrences}",
                         AutoSize = true,
-                        Location = new Point(0, counter * 50),
+                        Location = new Point(0, counter++ * 50),
                     };
                     segment.Controls.Add(label);
+                    _labels[segmentCounter].Add(label);
                 }
 
                 Controls.Add(segment);
                 segmentCounter++;
+            }
+        }
+
+        public void UpdateAchieved(MkTime newTime, int segment)
+        {
+            var dictionary = _goals[segment];
+            var labels = _labels[segment];
+            var counter = 0;
+            foreach (var time in dictionary.Keys.ToList())
+            {
+                if (time.Matches(newTime)) dictionary[time]++;
+                labels[counter++].Text = $"{time}: {dictionary[time]}";
             }
         }
     }

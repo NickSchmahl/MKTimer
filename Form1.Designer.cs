@@ -144,6 +144,11 @@ namespace MKTimer
                     allFilled = false;
                 }
             }
+            
+            // Update pace panel
+            var colIndex = e.ColumnIndex;
+            var newTime = new MkTime(timerGridView[colIndex, rowIndex].Value.ToString());
+            PacePanel.UpdateAchieved(newTime, colIndex-1);
 
             // Update the value of the Sum column in the current row
             if (allFilled) {
@@ -155,6 +160,9 @@ namespace MKTimer
                     trackInfo.Sob = new Run(lapTimes);
                     timerGridView.fillRowWithRun(2, timerGridView.sob);
                 } 
+                
+                // Update pacel panel
+                PacePanel.UpdateAchieved(new MkTime(timerGridView[TimerGridView.SUM_COLUMN_INDEX, rowIndex].Value.ToString()), 3);
             } else {
                 this.timerGridView[TimerGridView.SUM_COLUMN_INDEX, rowIndex].Value = "-";
             }
