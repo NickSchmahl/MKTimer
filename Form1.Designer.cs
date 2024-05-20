@@ -39,13 +39,10 @@ namespace MKTimer
             initializeTimerGridView();
             initializeTrackSelectionPanel();
             initializeRunCountPanel();
+            initializePacePanel();
             timerGridView.runCountPanel = runCountPanel;
 
             popUpMenu = new(this);
-
-            PacePanel = new PacePanel(trackInfo);
-            PacePanel.Location = new Point(100, 600);
-            Controls.Add(PacePanel);
 
             // MouseClickAction
             MouseClick += Form1_MouseClick;
@@ -67,9 +64,11 @@ namespace MKTimer
             Controls.Remove(timerGridView);
             Controls.Remove(trackSelectionPanel);
             Controls.Remove(runCountPanel);
+            Controls.Remove(PacePanel);
             initializeTimerGridView();
             initializeTrackSelectionPanel();
             initializeRunCountPanel();
+            initializePacePanel();
             timerGridView.runCountPanel = runCountPanel;
         }
 
@@ -83,6 +82,16 @@ namespace MKTimer
 
             Controls.Add(timerGridView);
             ((System.ComponentModel.ISupportInitialize)(this.timerGridView)).EndInit();
+        }
+
+        private void initializePacePanel()
+        {
+            PacePanel = new PacePanel(trackInfo);
+            PacePanel.Location = new Point(100, 600);
+            PacePanel.MouseClick += Form1_MouseClick;
+            PacePanel.KeyDown += KeyDownAction;
+            
+            Controls.Add(PacePanel);
         }
 
         private void initializeRunCountPanel() 
