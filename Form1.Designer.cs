@@ -15,7 +15,7 @@ namespace MKTimer
         private TrackSelectionPanel trackSelectionPanel;
         private RunCountPanel runCountPanel;
         private PopUpMenu popUpMenu;
-        private TrackInfo trackInfo;
+        public TrackInfo trackInfo { get; set; }
         private PacePanel PacePanel;
 
         private System.ComponentModel.IContainer components = null;

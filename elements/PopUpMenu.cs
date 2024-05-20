@@ -4,19 +4,20 @@ using MKTimer.elements;
 
 namespace MKTimer
 {
-    public class PopUpMenu : ContextMenuStrip
+    public sealed class PopUpMenu : ContextMenuStrip
     {
         private ToolStripMenuItem trackSelection = new("Track Selection");
+        private ToolStripMenuItem _paceChoose = new("Pace Choose");
         private Form1 mainForm;
 
         public PopUpMenu(Form1 mainForm)
         {
             this.mainForm = mainForm;
-            ToolStripMenuItem menuItem1 = new ToolStripMenuItem("Menu Item 1");
-            menuItem1.Click += MenuItem_Click;
+            
             trackSelection.Click += MenuItem_Click;
-            Items.Add(menuItem1);
+            _paceChoose.Click += MenuItem_Click;
             Items.Add(trackSelection);
+            Items.Add(_paceChoose);
         }
 
         private void MenuItem_Click(object? sender, EventArgs e)
@@ -30,11 +31,13 @@ namespace MKTimer
                     var newForm = new TrackSelectionForm(mainForm);
                     newForm.AutoSize = true;
                     newForm.ShowDialog();
-                    return;
                 }
-
-                ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
-                MessageBox.Show("Clicked: " + clickedItem.Text);
+                else if (sender == _paceChoose)
+                {
+                    var newForm = new PaceChooseForm(mainForm.trackInfo);
+                    newForm.AutoSize = true;
+                    newForm.ShowDialog();
+                }
             }
         }
     }

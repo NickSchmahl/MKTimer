@@ -6,13 +6,14 @@ using Newtonsoft.Json.Linq;
 
 namespace MKTimer.gameLogic {
     public class TrackInfo {
-        private const string JsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
+        public const string JsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
         private readonly string _csvPath;
         public Run? Pb;
         public Run? Sob;
         public readonly Run[] Runs;
         public readonly int RunCount;
         public readonly int SecondsPlayed;
+        public List<MkTime>[] Paces { get; }
         public readonly MK8DLXTrack Track;
         public readonly MK8DLXMode Mode;
 
@@ -32,11 +33,22 @@ namespace MKTimer.gameLogic {
                 var lapTimesToken = (JArray?) jsonObject[trackName]?[modeName]?["lap_times"];
                 var sobLapsToken = (JArray?) jsonObject[trackName]?[modeName]?["sob_laps"];
                 var runCountToken = (JValue?) jsonObject[trackName]?[modeName]?["run_count"];
+                var paces = (JArray?)jsonObject[trackName]?[modeName]?["paces"];
 
                 Pb = ParseLapTimes(lapTimesToken);
                 Sob = ParseLapTimes(sobLapsToken);
                 RunCount = runCountToken?.Value<int>() ?? 0;
                 SecondsPlayed = secondsPlayedToken?.Value<int>() ?? 0;
+                
+                if (paces != null) 
+                {
+                    Paces = new List<MkTime>[paces.Count];
+                    for (var i = 0; i < paces.Count; i++) 
+                    {
+                        var pace = paces[i].Select(time => new MkTime(time.ToString())).ToList();
+                        Paces[i] = pace;
+                    }
+                }
             }
 
             var runs = new List<Run>();
