@@ -15,6 +15,9 @@
     <Compile Update="elements\PaceChooseForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="elements\Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
