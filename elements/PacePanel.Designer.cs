@@ -47,23 +47,27 @@ partial class PacePanel
         var jsonObject = JObject.Parse(jsonData);
 
         // Navigate to the paces attribute for the selected track and mode
-        JArray paces = (JArray)jsonObject[trackInTrackInfo][modeInTrackInfo]["paces"];
-
-        // Iterate over each array in paces
-        var segCounter = 0;
-        foreach (JArray paceArray in paces)
+        if (jsonObject.ContainsKey(trackInTrackInfo) && jsonObject[trackInTrackInfo][modeInTrackInfo] != null)
         {
-            // Iterate over each string in the array
-            foreach (string pace in paceArray)
+            JArray paces = (JArray)jsonObject[trackInTrackInfo][modeInTrackInfo]["paces"];
+            if (paces == null) return;
+            
+            // Iterate over each array in paces
+            var segCounter = 0;
+            foreach (JArray paceArray in paces)
             {
-                // Add the string to _goals
-                if (pace != "00,000") _goals[segCounter].Add(new MkTime(pace), 0);
+                // Iterate over each string in the array
+                foreach (string pace in paceArray)
+                {
+                    // Add the string to _goals
+                    if (pace != "00,000" && pace != "") _goals[segCounter].Add(new MkTime(pace), 0);
+                }
+
+                segCounter++;
             }
 
-            segCounter++;
+            CreateSegments(trackInfo.Runs);    
         }
-
-        CreateSegments(trackInfo.Runs);
     }
 
     #endregion

@@ -8,8 +8,8 @@ namespace MKTimer
 {
     public partial class Form1 : Form
     {
-        private static Form1? activeForm;
-        private static readonly string startFile = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\start.json";
+        private static Form1? _activeForm;
+        private static readonly string StartFile = Path.Combine("data", "start.json");
 
         public Form1()
         {   
@@ -19,9 +19,9 @@ namespace MKTimer
             var track = MK8DLXTrack.WiiMooMooMeadows;
             var mode = MK8DLXMode._200CC;
 
-            if (File.Exists(startFile))
+            if (File.Exists(StartFile))
             {
-                string json = File.ReadAllText(startFile);
+                string json = File.ReadAllText(StartFile);
                 JObject jsonObject = JObject.Parse(json);
 
                 if (jsonObject.ContainsKey(trackJsonKey)) 
@@ -43,12 +43,12 @@ namespace MKTimer
             trackInfo = new TrackInfo(track, mode);
 
             InitializeComponent();
-            if (activeForm != null) 
+            if (_activeForm != null) 
             {
                 // activeForm.Close();
-                activeForm = null;
+                _activeForm = null;
             }
-            activeForm = this;
+            _activeForm = this;
         }
 
     }

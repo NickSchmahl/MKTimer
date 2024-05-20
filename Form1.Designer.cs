@@ -208,7 +208,7 @@ namespace MKTimer
                 { "track", trackInfo.Track.ToString() },
                 { "mode", trackInfo.Mode.ToString() }
             };
-            if (File.Exists(startFile)) File.WriteAllText(startFile, startupRun.ToString());
+            if (File.Exists(StartFile)) File.WriteAllText(StartFile, startupRun.ToString());
             else Console.WriteLine("Couldn't find start.json");
         }
 

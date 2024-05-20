@@ -6,7 +6,7 @@ using Newtonsoft.Json.Linq;
 
 namespace MKTimer.gameLogic {
     public class TrackInfo {
-        public const string JsonPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\tracks.json";
+        public static readonly string JsonPath = Path.Combine("data", "tracks.json");
         private readonly string _csvPath;
         public Run? Pb;
         public Run? Sob;
@@ -21,10 +21,11 @@ namespace MKTimer.gameLogic {
         {
             Track = track;
             Mode = mode;
-            _csvPath = @"C:\Users\nschmahl\RiderProjects\MKTimer\data\" + track + mode + ".csv";
+            _csvPath = Path.Combine("data", "runs", $"{track}{mode}.csv");
 
             var trackName = track.ToString();
             var modeName = mode.ToString();
+            
             var jsonObject = JObject.Parse(File.ReadAllText(JsonPath));
 
             var secondsPlayedToken = (JValue?) jsonObject[trackName]?[modeName]?["seconds_played"];
@@ -72,7 +73,7 @@ namespace MKTimer.gameLogic {
             }
             else
             {
-                File.Create(_csvPath);
+                File.WriteAllText(_csvPath, "");
             }
 
             Runs = runs.ToArray();
@@ -106,6 +107,8 @@ namespace MKTimer.gameLogic {
             File.WriteAllText(JsonPath, storedObj.ToString());
 
             if (!File.Exists(_csvPath)) return;
+            Console.Write($"Saved {runs.Count} runs to {_csvPath}.");
+            
             var toWrite = "";
             foreach (var run in runs) 
             {
@@ -117,7 +120,6 @@ namespace MKTimer.gameLogic {
                 }
                 toWrite += "\n";
             }
-            Console.Write("Wanna write something: " + toWrite);
 
             File.AppendAllText(_csvPath, toWrite);
         }

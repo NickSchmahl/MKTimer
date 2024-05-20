@@ -17,4 +17,16 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="bin\Debug\net8.0-windows\data\runs\GBARiversidePark_150CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\GBARiversidePark_200CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\GBASkyGarden_150CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\SNESBowserCastle3_200CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\SNESDonutPlains3_150CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\SNESRainbowRoad_150CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\runs\SNESRainbowRoad_200CC.csv" />
+    <None Include="bin\Debug\net8.0-windows\data\start.json" />
+    <None Include="bin\Debug\net8.0-windows\data\tracks.json" />
+  </ItemGroup>
+
 </Project>
