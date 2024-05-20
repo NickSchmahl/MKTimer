@@ -14,6 +14,7 @@ namespace MKTimer.gameLogic {
         public readonly int RunCount;
         public readonly int SecondsPlayed;
         public List<MkTime>[] Paces { get; }
+        private int SavedRuns { get; set; }
         public readonly MK8DLXTrack Track;
         public readonly MK8DLXMode Mode;
 
@@ -107,12 +108,12 @@ namespace MKTimer.gameLogic {
             File.WriteAllText(JsonPath, storedObj.ToString());
 
             if (!File.Exists(_csvPath)) return;
-            Console.Write($"Saved {runs.Count} runs to {_csvPath}.");
             
             var toWrite = "";
-            foreach (var run in runs) 
+            for (int i = SavedRuns; i < runs.Count - 1; i++)
             {
-                foreach (var time in run.laps) 
+                var run = runs[i];
+                foreach (var time in run.laps)
                 {
                     if (time == null) toWrite += "-";
                     else toWrite += time.ToString();
@@ -122,6 +123,8 @@ namespace MKTimer.gameLogic {
             }
 
             File.AppendAllText(_csvPath, toWrite);
+            Console.WriteLine($"Saved {runs.Count - SavedRuns - 1} runs to {_csvPath}.");
+            SavedRuns = runs.Count - 1;
         }
 
         private static Run? ParseLapTimes(JArray? jsonArray) 
