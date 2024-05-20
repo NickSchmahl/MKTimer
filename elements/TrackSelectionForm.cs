@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Drawing;
 using System.Windows.Forms;
 
-namespace MKTimer {
+namespace MKTimer.elements {
     public class TrackSelectionForm : Form {
-        private ComboBox comboBoxTrack;
-        private ComboBox comboBoxMode;
-        private Button submitButton;
-        private Form1 mainForm;
+        private readonly ComboBox _comboBoxTrack;
+        private readonly ComboBox _comboBoxMode;
+        private readonly Button _submitButton;
+        private readonly Form1 _mainForm;
 
         public TrackSelectionForm(Form1 mainForm) {
-            this.mainForm = mainForm;
+            _mainForm = mainForm;
 
             // Initialize the ComboBox
             List<ComboBoxItem<MK8DLXTrack>> trackItems = [];
@@ -26,65 +26,59 @@ namespace MKTimer {
                 modeItems.Add(new ComboBoxItem<MK8DLXMode>(value, value.getMode()));
             }
 
-            comboBoxTrack = new ComboBox
+            _comboBoxTrack = new ComboBox
             {
-                Location = new System.Drawing.Point(50, 50),
-                Size = new System.Drawing.Size(500, 50),
+                Location = new Point(50, 50),
+                Size = new Size(500, 50),
                 DataSource = trackItems,
                 DropDownStyle = ComboBoxStyle.DropDownList, // Set dropdown style to prevent user input
                 DisplayMember = "DisplayValue"
             };
-            Controls.Add(comboBoxTrack);
+            Controls.Add(_comboBoxTrack);
 
-            comboBoxMode = new ComboBox
+            _comboBoxMode = new ComboBox
             {
-                Location = new System.Drawing.Point(50, 100),
-                Size = new System.Drawing.Size(200, 50),
+                Location = new Point(50, 100),
+                Size = new Size(200, 50),
                 DataSource = modeItems,
                 DropDownStyle = ComboBoxStyle.DropDownList, // Set dropdown style to prevent user input
                 DisplayMember = "DisplayValue"
             };
-            Controls.Add(comboBoxMode);
+            Controls.Add(_comboBoxMode);
 
 
             // Initialize the Submit Button
-            submitButton = new Button
+            _submitButton = new Button
             {
                 Text = "Submit",
-                Location = new System.Drawing.Point(50, 150),
-                Size = new System.Drawing.Size(200, 50)
+                Location = new Point(50, 150),
+                Size = new Size(200, 50)
             };
-            submitButton.Click += SubmitButton_Click; // Attach click event handler
-            Controls.Add(submitButton);
-
-            AutoSize = true;
+            _submitButton.Click += SubmitButton_Click; // Attach click event handler
+            Controls.Add(_submitButton);
         }
 
         private void SubmitButton_Click(object? sender, EventArgs e)
         {
             // Handle submit button click event
-            if (comboBoxTrack.SelectedItem?.GetType() == typeof(ComboBoxItem<MK8DLXTrack>) && 
-                    comboBoxMode.SelectedItem?.GetType() == typeof(ComboBoxItem<MK8DLXMode>)) 
+            if (_comboBoxTrack.SelectedItem?.GetType() == typeof(ComboBoxItem<MK8DLXTrack>) && 
+                    _comboBoxMode.SelectedItem?.GetType() == typeof(ComboBoxItem<MK8DLXMode>)) 
             {
-                MK8DLXTrack selectedTrack = ((ComboBoxItem<MK8DLXTrack>) comboBoxTrack.SelectedItem).Value;
-                MK8DLXMode selectedMode = ((ComboBoxItem<MK8DLXMode>) comboBoxMode.SelectedItem).Value;
+                var selectedTrack = ((ComboBoxItem<MK8DLXTrack>) _comboBoxTrack.SelectedItem).Value;
+                var selectedMode = ((ComboBoxItem<MK8DLXMode>) _comboBoxMode.SelectedItem).Value;
 
-                mainForm.UpdateSelection(selectedTrack, selectedMode);
+                _mainForm.UpdateSelection(selectedTrack, selectedMode);
 
                 Close();
             }
         }
 
-        public class ComboBoxItem<T>
+        private class ComboBoxItem<T>(T value, string displayValue)
         {
-            public T Value { get; }
-            public string DisplayValue { get; }
-
-            public ComboBoxItem(T value, string displayValue)
-            {
-                Value = value;
-                DisplayValue = displayValue;
-            }
+            public T Value { get; } = value;
+            // ReSharper disable once UnusedMember.Local
+            // Is used in the ComboBox.DisplayMember property
+            public string DisplayValue { get; } = displayValue;
         }
     }
 }
